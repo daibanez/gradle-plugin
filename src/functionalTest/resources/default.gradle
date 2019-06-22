@@ -1,0 +1,9 @@
+plugins {
+    id 'dai.pipeline'
+}
+
+repositories {
+    maven {
+        url = uri("$buildDir/repository")
+    }
+}

@@ -1,0 +1,13 @@
+plugins {
+    id 'dai.pipeline'
+}
+
+pipeline {
+    greeting = "Hola"
+}
+
+repositories {
+    maven {
+        url = uri("$buildDir/repository")
+    }
+}
