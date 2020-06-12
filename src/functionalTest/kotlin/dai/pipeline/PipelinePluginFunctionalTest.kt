@@ -15,15 +15,16 @@ class PipelinePluginFunctionalTest : FunctionalTestBase() {
     /**
      * 4.9 project.register(name,TaskClass)
      * 5.1 property.convention(defaultValue)
+     * 6.0 Gradle beings support for JDK13
      */
     @Test
-    fun `should be compatible with Gradle v5_1+`(@TempDir tempDir: Path) {
+    fun `should be compatible with Gradle v6_0+`(@TempDir tempDir: Path) {
         tempDir.resolve("build.gradle").apply {
             Files.createFile(this)
             this.toFile().fillFromResource("default.gradle")
         }
         val runResult = GradleRunner.create()
-            .withGradleVersion("5.1")
+            .withGradleVersion("6.0")
             .withProjectDir(tempDir.toFile())
             .withArguments("helloTask")
             .withTestKitDir(tempDir.resolve("testKitDir").toFile())
@@ -45,7 +46,7 @@ class PipelinePluginFunctionalTest : FunctionalTestBase() {
             this.toFile().fillFromResource("configured.gradle")
         }
         val runResult = GradleRunner.create()
-            .withGradleVersion("5.1")
+            .withGradleVersion("6.1")
             .withProjectDir(tempDir.toFile())
             .withArguments("helloTask")
             .withTestKitDir(tempDir.resolve("testKitDir").toFile())

@@ -1,36 +1,43 @@
+import io.spring.gradle.dependencymanagement.dsl.DependencyManagementExtension
 import org.jetbrains.kotlin.gradle.plugin.KotlinSourceSet
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
+import org.springframework.boot.gradle.plugin.SpringBootPlugin
 
 plugins {
-    "kotlin"
-    kotlin("jvm").version("1.3.40")
+    `kotlin-dsl`
+    kotlin("jvm").version("1.3.72")
     id("maven-publish")
     id("java-gradle-plugin")
-    id("com.github.ben-manes.versions").version("0.21.0")
+
+    kotlin("plugin.spring").version("1.3.72")
+    id("org.springframework.boot").version("2.3.0.RELEASE").apply(false)
+    id("io.spring.dependency-management").version("1.0.9.RELEASE")
+
+    id("com.github.ben-manes.versions").version("0.28.0")
 }
 
 repositories {
-    mavenCentral()
     jcenter()
 }
 
 group = "dai.pipeline"
 version = "0.0.1-SNAPSHOT"
 
-val compileKotlin: KotlinCompile by tasks
-compileKotlin.kotlinOptions {
-    freeCompilerArgs = listOf("-Xjsr305=strict")
-    jvmTarget = "1.8"
+tasks.withType<KotlinCompile> {
+    this.kotlinOptions {
+        this.freeCompilerArgs = listOf("-Xjsr305=strict")
+        this.jvmTarget = "1.8"
+    }
 }
 
-val compileTestKotlin: KotlinCompile by tasks
-compileTestKotlin.kotlinOptions {
-    freeCompilerArgs = listOf("-Xjsr305=strict")
-    jvmTarget = "1.8"
+the<DependencyManagementExtension>().apply {
+    imports {
+        mavenBom(SpringBootPlugin.BOM_COORDINATES) {
+            // KOTLIN VERSION
+            bomProperty("kotlin.version", "1.3.72")
+        }
+    }
 }
-
-val test: Test by tasks
-test.useJUnitPlatform()
 
 val sourcesJar by tasks.registering(Jar::class) {
     from(sourceSets.main.get().allSource)
@@ -49,7 +56,6 @@ publishing {
     publications {
         create<MavenPublication>("default") {
             from(components["java"])
-//            artifact(sourcesJar.get())
         }
     }
     repositories {
@@ -76,10 +82,16 @@ task<Test>("functionalTest") {
     testClassesDirs = sourceSets["functionalTest"].output.classesDirs
     classpath = sourceSets["functionalTest"].runtimeClasspath
     //mustRunAfter(tasks["test"])
-    useJUnitPlatform()
 }
 
 //check.dependsOn functionalTest
+
+tasks.withType<Test> {
+    this.useJUnitPlatform {
+        // exclude junit 4 stuff
+        excludeEngines("junit-vintage")
+    }
+}
 
 val implementation by configurations
 val testImplementation by configurations

@@ -13,7 +13,7 @@ open class HelloTask : DefaultTask() {
         @JvmStatic
         fun register(project: Project, pipelineExtension: PipelineExtension): TaskProvider<HelloTask> {
             return project.tasks.register("helloTask", HelloTask::class.java) {
-                it.greeting.set(pipelineExtension.greeting)
+                this.greeting.set(pipelineExtension.greeting)
             }
         }
     }
