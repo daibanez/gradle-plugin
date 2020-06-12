@@ -1,8 +1,6 @@
 package dai.pipeline
 
-import assertk.assertThat
-import assertk.assertions.contains
-import assertk.assertions.isEqualTo
+import org.assertj.core.api.Assertions.assertThat
 import org.gradle.testkit.runner.GradleRunner
 import org.gradle.testkit.runner.TaskOutcome
 import org.junit.jupiter.api.Test

@@ -10,7 +10,7 @@ plugins {
     id("java-gradle-plugin")
 
     kotlin("plugin.spring").version("1.3.72")
-    id("org.springframework.boot").version("2.3.0.RELEASE").apply(false)
+    id("org.springframework.boot").version("2.3.1.RELEASE").apply(false)
     id("io.spring.dependency-management").version("1.0.9.RELEASE")
 
     id("com.github.ben-manes.versions").version("0.28.0")
@@ -107,13 +107,9 @@ dependencies {
     implementation(gradleApi())
     testImplementation(gradleTestKit())
 
-    // Testing: JUnit5 and kotlin utilities
-    testImplementation("org.junit.jupiter:junit-jupiter-api:5.4.2")
-    testImplementation("com.nhaarman.mockitokotlin2:mockito-kotlin:2.1.0")
-    testImplementation("org.mockito:mockito-inline:2.28.2")
-    testImplementation("com.willowtreeapps.assertk:assertk-jvm:0.17")
-
-    testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:5.4.2")
+    testImplementation("org.springframework.boot:spring-boot-starter-test") {
+        exclude("junit", "junit")
+    }
 }
 
 gradle.taskGraph.whenReady {
